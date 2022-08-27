@@ -1,0 +1,14 @@
+server:
+  error:
+    include-stacktrace: never
+
+spring:
+  application:
+    name: star-wars-api
+  datasource:
+    url: jdbc:mysql://localhost:3306/star-wars-api?useSSL=false&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: update
