@@ -29,4 +29,16 @@ public class PlanetController {
     public ResponseEntity<List<Planet>> findByName(@RequestParam String name) {
         return new ResponseEntity<>(planetService.findByName(name), HttpStatus.FOUND);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Planet> findById(@PathVariable Long id) {
+        return new ResponseEntity<>(planetService.findByIdOrElseThrowsResponseStatusException(id), HttpStatus.FOUND);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        planetService.delete(id);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
