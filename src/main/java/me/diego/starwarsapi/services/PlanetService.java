@@ -2,7 +2,6 @@ package me.diego.starwarsapi.services;
 
 import me.diego.starwarsapi.domain.Planet;
 import me.diego.starwarsapi.repositories.PlanetRepository;
-import me.diego.starwarsapi.util.PlanetRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -16,14 +15,14 @@ public class PlanetService {
     PlanetRepository planetRepository;
 
     @Autowired
-    PlanetRequest planetRequest;
+    SwApiService swApiService;
 
     public List<Planet> listAll() {
         return planetRepository.findAll();
     }
 
     public Planet save(Planet planet) {
-        planet.setApparitions(planetRequest.getNumberFilms(planet.getName()));
+        planet.setApparitions(swApiService.getFilms(planet.getName()));
 
         return planetRepository.save(planet);
     }
