@@ -24,4 +24,9 @@ public class PlanetController {
     public ResponseEntity<Planet> save(@RequestBody Planet planet) {
         return new ResponseEntity<>(planetService.save(planet), HttpStatus.CREATED);
     }
+
+    @GetMapping(params = "name")
+    public ResponseEntity<List<Planet>> findByName(@RequestParam String name) {
+        return new ResponseEntity<>(planetService.findByName(name), HttpStatus.FOUND);
+    }
 }

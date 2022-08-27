@@ -25,4 +25,8 @@ public class PlanetService {
 
         return planetRepository.save(planet);
     }
+
+    public List<Planet> findByName(String name) {
+        return planetRepository.findByName(name);
+    }
 }
