@@ -3,6 +3,9 @@ package me.diego.starwarsapi.controllers;
 import me.diego.starwarsapi.domain.Planet;
 import me.diego.starwarsapi.services.PlanetService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +19,8 @@ public class PlanetController {
     PlanetService planetService;
 
     @GetMapping
-    public ResponseEntity<List<Planet>> findAll() {
-        return new ResponseEntity<>(planetService.listAll(), HttpStatus.OK);
+    public ResponseEntity<Page<Planet>> findAll(@PageableDefault Pageable pageable) {
+        return new ResponseEntity<>(planetService.listAll(pageable), HttpStatus.OK);
     }
 
     @PostMapping

@@ -3,6 +3,8 @@ package me.diego.starwarsapi.services;
 import me.diego.starwarsapi.domain.Planet;
 import me.diego.starwarsapi.repositories.PlanetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -17,8 +19,8 @@ public class PlanetService {
     @Autowired
     SwApiService swApiService;
 
-    public List<Planet> listAll() {
-        return planetRepository.findAll();
+    public Page<Planet> listAll(Pageable pageable) {
+        return planetRepository.findAll(pageable);
     }
 
     public Planet save(Planet planet) {
