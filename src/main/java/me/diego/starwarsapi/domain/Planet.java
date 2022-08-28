@@ -13,6 +13,7 @@ import javax.persistence.Id;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 public class Planet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

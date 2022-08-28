@@ -12,7 +12,7 @@ public class PlanetCreator {
                 .name("PlanetTest")
                 .climate("temperate")
                 .terrain("mountains")
-                .apparitions(0)
+                .apparitions(3)
                 .build();
     }
 
@@ -33,7 +33,7 @@ public class PlanetCreator {
                 .name("PlanetTest")
                 .climate("temperate")
                 .terrain("mountains")
-                .apparitions(0)
+                .apparitions(3)
                 .build();
     }
 }

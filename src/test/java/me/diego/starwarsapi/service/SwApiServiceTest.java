@@ -1,6 +1,6 @@
 package me.diego.starwarsapi.service;
 
-import org.junit.jupiter.api.Assertions;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,6 +17,7 @@ class SwApiServiceTest {
     void getFilms_ReturnsCount_WhenSuccessful() {
         int expectedNumber = 5;
         int response = swApiService.getFilms("Tatooine");
-        Assertions.assertEquals(expectedNumber, response);
+        Assertions.assertThat(response)
+                .isEqualTo(expectedNumber);
     }
 }
