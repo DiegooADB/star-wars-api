@@ -36,4 +36,12 @@ public class PlanetCreator {
                 .apparitions(3)
                 .build();
     }
+
+    public static Planet createPlanetToBeSaved() {
+        return Planet.builder()
+                .name("Tatooine")
+                .climate("temperate")
+                .terrain("mountains")
+                .build();
+    }
 }
