@@ -1,7 +1,7 @@
-package me.diego.starwarsapi.service;
+package me.diego.starwarsapi.controller;
 
 import me.diego.starwarsapi.domain.Planet;
-import me.diego.starwarsapi.repository.PlanetRepository;
+import me.diego.starwarsapi.service.PlanetService;
 import me.diego.starwarsapi.util.PlanetCreator;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,56 +15,49 @@ import org.mockito.Mock;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
-@ExtendWith({SpringExtension.class})
-class PlanetServiceTest {
+@ExtendWith(SpringExtension.class)
+class PlanetControllerTest {
+
     @InjectMocks
+    private PlanetController planetController;
+
+    @Mock
     private PlanetService planetService;
-
-    @Mock
-    private PlanetRepository planetRepository;
-
-    @Mock
-    private SwApiService swApiService;
 
     @BeforeEach
     void setUp() {
         PageImpl<Planet> planetPage = new PageImpl<>(List.of(PlanetCreator.createPlanetWithId()));
-        BDDMockito.when(planetRepository.findAll(ArgumentMatchers.any(PageRequest.class)))
+        BDDMockito.when(planetService.findAll(ArgumentMatchers.any(PageRequest.class)))
                 .thenReturn(planetPage);
 
-        BDDMockito.when(swApiService.getFilms(ArgumentMatchers.anyString()))
-                .thenReturn(3);
-
-        BDDMockito.when(planetRepository.save(ArgumentMatchers.any(Planet.class)))
+        BDDMockito.when(planetService.save(ArgumentMatchers.any(Planet.class)))
                 .thenReturn(PlanetCreator.createPlanetWithId());
 
-        BDDMockito.when(planetRepository.findByName(ArgumentMatchers.anyString()))
+        BDDMockito.when(planetService.findByName(ArgumentMatchers.anyString()))
                 .thenReturn(List.of(PlanetCreator.createPlanetWithId()));
 
-        BDDMockito.when(planetRepository.findById(ArgumentMatchers.anyLong()))
-                .thenReturn(Optional.of(PlanetCreator.createPlanetWithId()));
+        BDDMockito.when(planetService.findByIdOrElseThrowsResponseStatusException(ArgumentMatchers.anyLong()))
+                .thenReturn(PlanetCreator.createPlanetWithId());
 
-        BDDMockito.doNothing().when(planetRepository).delete(ArgumentMatchers.any(Planet.class));
+        BDDMockito.doNothing().when(planetService).delete(ArgumentMatchers.anyLong());
     }
 
     @Test
     @DisplayName("listAll returns list of planets inside a page when successful")
     void listAll_ReturnsListOfPlanetsInsideAPage_WhenSuccessful() {
         String planetExpectedName = PlanetCreator.createPlanetWithId().getName();
-
-        Page<Planet> planets = planetService.findAll(PageRequest.of(1, 1));
-
+        Page<Planet> planets = planetController.listAll(PageRequest.of(1, 1)).getBody();
 
         Assertions.assertThat(planets)
                 .isNotNull();
 
-        Assertions.assertThat(planets)
+        Assertions.assertThat(planets.toList())
                 .isNotEmpty()
                 .hasSize(1);
 
@@ -76,9 +69,10 @@ class PlanetServiceTest {
     void save_ReturnsPlanet_WhenSuccessful() {
         Planet planetToSave = PlanetCreator.createPlanetWithoutId();
 
-        Planet planetSaved = planetService.save(planetToSave);
+        Planet planetSaved = planetController.save(planetToSave).getBody();
 
         Assertions.assertThat(planetSaved)
+                .isNotNull()
                 .isEqualTo(PlanetCreator.createPlanetWithId());
 
         Assertions.assertThat(planetSaved.getApparitions())
@@ -90,7 +84,7 @@ class PlanetServiceTest {
     void findByName_ReturnsListOfPlanets_WhenSuccessful() {
         String planetExpected = PlanetCreator.createPlanetWithId().getName();
 
-        List<Planet> planetList = planetService.findByName("PlanetTest");
+        List<Planet> planetList = planetController.findByName("PlanetTest").getBody();
 
         Assertions.assertThat(planetList)
                 .isNotNull()
@@ -105,7 +99,7 @@ class PlanetServiceTest {
     void findByIdOrElseThrowsResponseStatusException_ReturnsAPlanet_WhenSuccessful() {
         long planetExpected = PlanetCreator.createPlanetWithId().getId();
 
-        Planet planetFounded = planetService.findByIdOrElseThrowsResponseStatusException(1L);
+        Planet planetFounded = planetController.findById(1L).getBody();
 
         Assertions.assertThat(planetFounded)
                 .isNotNull();
@@ -114,19 +108,14 @@ class PlanetServiceTest {
     }
 
     @Test
-    @DisplayName("findByIdOrElseThrowsResponseStatusException throws ResponseStatusException when not found")
-    void findByIdOrElseThrowsResponseStatusException_ThrowsResponseStatusException_WhenNotFound() {
-        BDDMockito.when(planetRepository.findById(ArgumentMatchers.anyLong()))
-                        .thenReturn(Optional.empty());
-
-        Assertions.assertThatExceptionOfType(ResponseStatusException.class)
-                .isThrownBy(() -> planetService.findByIdOrElseThrowsResponseStatusException(1L));
-    }
-
-    @Test
     @DisplayName("delete removes planet when successful")
     void delete_RemovesPlanet_WhenSuccessful() {
-        Assertions.assertThatCode(() -> planetService.delete(1L))
+        ResponseEntity<Void> deleteResponse = planetController.delete(1L);
+
+        Assertions.assertThatCode(() -> planetController.delete(1L))
                 .doesNotThrowAnyException();
+
+        Assertions.assertThat(deleteResponse.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     }
+
 }

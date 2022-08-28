@@ -19,7 +19,7 @@ public class PlanetService {
     @Autowired
     SwApiService swApiService;
 
-    public Page<Planet> listAll(Pageable pageable) {
+    public Page<Planet> findAll(Pageable pageable) {
         return planetRepository.findAll(pageable);
     }
 

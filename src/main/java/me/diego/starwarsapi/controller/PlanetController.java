@@ -19,8 +19,8 @@ public class PlanetController {
     PlanetService planetService;
 
     @GetMapping
-    public ResponseEntity<Page<Planet>> findAll(@PageableDefault Pageable pageable) {
-        return new ResponseEntity<>(planetService.listAll(pageable), HttpStatus.OK);
+    public ResponseEntity<Page<Planet>> listAll(@PageableDefault Pageable pageable) {
+        return new ResponseEntity<>(planetService.findAll(pageable), HttpStatus.OK);
     }
 
     @PostMapping
