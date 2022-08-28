@@ -1,4 +1,4 @@
-package me.diego.starwarsapi.repositories;
+package me.diego.starwarsapi.repository;
 
 import me.diego.starwarsapi.domain.Planet;
 import org.springframework.data.jpa.repository.JpaRepository;

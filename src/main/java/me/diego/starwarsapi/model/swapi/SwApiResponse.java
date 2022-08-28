@@ -1,4 +1,4 @@
-package me.diego.starwarsapi.dto;
+package me.diego.starwarsapi.model.swapi;
 
 import lombok.Getter;
 

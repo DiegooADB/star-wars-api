@@ -1,7 +1,7 @@
-package me.diego.starwarsapi.services;
+package me.diego.starwarsapi.service;
 
 import me.diego.starwarsapi.domain.Planet;
-import me.diego.starwarsapi.repositories.PlanetRepository;
+import me.diego.starwarsapi.repository.PlanetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

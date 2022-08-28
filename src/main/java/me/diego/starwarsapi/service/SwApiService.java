@@ -1,7 +1,8 @@
-package me.diego.starwarsapi.services;
+package me.diego.starwarsapi.service;
 
-import me.diego.starwarsapi.dto.SwApiResponse;
-import me.diego.starwarsapi.dto.PlanetResponse;
+import lombok.RequiredArgsConstructor;
+import me.diego.starwarsapi.model.swapi.SwApiResponse;
+import me.diego.starwarsapi.model.swapi.PlanetResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -10,7 +11,7 @@ import java.util.List;
 
 @Service
 public class SwApiService {
-    public Integer getFilms(String name) {
+    public int getFilms(String name) {
         ResponseEntity<SwApiResponse> response = WebClient
                 .create("https://swapi.dev/api/planets?search=%s".formatted(name))
                 .get()
